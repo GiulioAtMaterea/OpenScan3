@@ -1,6 +1,7 @@
 import json
 import pathlib
 import os
+import re
 
 from app.config.camera import CameraSettings
 from app.config.cloud import CloudSettings
@@ -51,4 +52,12 @@ class OpenScanConfig:
 
     @staticmethod
     def _get_camera_configs() -> dict[str, CameraSettings]:
-        return {}
+        cam_settings={}
+        files = os.listdir('settings')
+        for f in files:
+            if 'camera_' in f:
+                id=re.findall(r'\d+', f)[0]
+                with open(f"settings/camera_{id}.json") as cam_file:
+                    config = json.load(cam_file)
+                    cam_settings[id] = config
+        return cam_settings
