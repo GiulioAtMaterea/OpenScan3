@@ -19,7 +19,10 @@ class OpenScanConfig:
         load_dotenv()
         # cls.scanner = ScannerConfig(turntable_mode=False)
         # cls.cloud = OpenScanCloudConfig("", "", "", "")
-        cls.cameras: dict[str, CameraSettings] = OpenScanConfig._get_camera_configs()
+        #cls.cameras: dict[str, CameraSettings] = OpenScanConfig._get_camera_configs()
+        cls.cameras: dict[str, CameraSettings] = {
+            "unicam" : OpenScanConfig._load_camera_config("unicam")
+            }
         cls.motors: dict[str, Motor] = {
             # "tt": OpenScanConfig._load_motor_config("turntable"),
             # "rotor": OpenScanConfig._load_motor_config("rotor"),
@@ -48,16 +51,12 @@ class OpenScanConfig:
 
     @staticmethod
     def _load_camera_config(name: str) -> CameraSettings:
+        with open(f"settings/camera_{name}.json") as f:
+            config = json.load(f)
+            return CameraSettings(**config)
+
         return {}
 
     @staticmethod
     def _get_camera_configs() -> dict[str, CameraSettings]:
-        cam_settings={}
-        files = os.listdir('settings')
-        for f in files:
-            if 'camera_' in f:
-                id=re.findall(r'\d+', f)[0]
-                with open(f"settings/camera_{id}.json") as cam_file:
-                    config = json.load(cam_file)
-                    cam_settings[id] = config
-        return cam_settings
+        return {}
