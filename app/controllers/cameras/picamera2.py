@@ -34,6 +34,7 @@ class Picamera2Camera(CameraController):
     def photo(camera: Camera) -> IO[bytes]:
         data = TemporaryFile()
         picam2 = Picamera2Camera._get_camera(camera, CameraMode.PHOTO)
+        picam2.set_controls({"AfMode": (2 if camera.settings.AF else 0)})
         picam2.capture_file(data, format='jpeg')
         data.seek(0)
         return data
@@ -43,6 +44,7 @@ class Picamera2Camera(CameraController):
     def preview(camera: Camera) -> IO[bytes]:
         data = TemporaryFile()
         picam2 = Picamera2Camera._get_camera(camera, CameraMode.PREVIEW)
+        picam2.set_controls({"AfMode": (2 if camera.settings.AF else 0)})
         picam2.capture_file(data, format='jpeg')
         data.seek(0)
         return data
