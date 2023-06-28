@@ -51,6 +51,8 @@ class OpenScanConfig:
 
     @staticmethod
     def _load_camera_config(name: str) -> CameraSettings:
+        if not os.path.exists(f"settings/camera_{name}.json"):
+            return {}
         with open(f"settings/camera_{name}.json") as f:
             config = json.load(f)
             return CameraSettings(**config)
