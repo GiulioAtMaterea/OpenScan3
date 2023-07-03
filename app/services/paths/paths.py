@@ -19,6 +19,9 @@ def cartesian_to_polar(point: CartesianPoint3D) -> PolarPoint3D:
     fi = np.degrees(np.arctan(point.x / point.y))
     return PolarPoint3D(theta, fi, r)
 
+def adv_get_path(method: PathMethod, num_points: int, num_rings: int, max_a:int, min_a:int) ->list[CartesianPoint3D]:
+    if method == PathMethod.GRID:
+        return PathGeneratorGrid.adv_get_path(num_points, num_rings, max_a, min_a)
 
 def get_path(method: PathMethod, num_points: int) -> list[CartesianPoint3D]:
     if method == PathMethod.GRID:
@@ -52,9 +55,26 @@ class PathGenerator(abc.ABC):
         raise NotImplementedError
 
 
+
+
+
 class PathGeneratorGrid(PathGenerator):
     def get_path(num_points: int) -> list[CartesianPoint3D]:
         return []
+    
+    def adv_get_path(num_points:int, num_rings:int, max_a:int, min_a:int) -> list[CartesianPoint3D]:
+        a_step = (max_a - min_a)/num_rings-1
+        phy = np.arange(min_a, max_a+a_step, a_step).tolist()
+        p_step = (2*np.pi)/num_points
+        theta = np.arange(0,2*np.pi + p_step, p_step).tolist()
+        res = []
+        for p in phy:
+            for t in theta:
+                x= np.sin(t)*np.cos(p)
+                y = np.sin(t)*np.sin(p)
+                z= np.cos(t)
+                res.append(CartesianPoint3D(x,y,z))
+        return res
 
 
 #  fibonacci sphere based on method by Seahmatthews
