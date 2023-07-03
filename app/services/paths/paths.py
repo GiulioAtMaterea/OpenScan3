@@ -64,9 +64,9 @@ class PathGeneratorGrid(PathGenerator):
     
     def adv_get_path(num_points:int, num_rings:int, max_a:int, min_a:int) -> list[CartesianPoint3D]:
         a_step = (max_a - min_a)/num_rings-1
-        phy = np.arange(min_a, max_a+a_step, a_step).tolist()
+        theta = np.arange(min_a, max_a+a_step, a_step).tolist()
         p_step = (2*np.pi)/num_points
-        theta = np.arange(0,2*np.pi + p_step, p_step).tolist()
+        phy = np.arange(0,2*np.pi + p_step, p_step).tolist()
         res = []
         for p in phy:
             for t in theta:
